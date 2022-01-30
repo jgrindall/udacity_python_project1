@@ -1,3 +1,5 @@
+"""Utility code for lesson quizzes."""
+
 import csv
 import json
 

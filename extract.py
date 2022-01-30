@@ -14,9 +14,9 @@ the resulting collections to build an `NEODatabase`.
 
 You'll edit this file in Task 2.
 """
+
 import csv
 import json
-
 from models import NearEarthObject, CloseApproach
 
 
@@ -26,7 +26,6 @@ def load_neos(neo_csv_path):
     :param neo_csv_path: path to a CSV file containing data about neos.
     :return: A collection of `NearEarthObject`s.
     """
-
     neos = []
 
     with open(neo_csv_path, encoding='utf-8') as f:
@@ -46,7 +45,6 @@ def load_approaches(cad_json_path):
 
     :return: A collection of `CloseApproach`es.
     """
-
     approaches = []
 
     with open(cad_json_path, encoding='utf-8') as f:

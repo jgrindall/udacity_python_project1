@@ -1,5 +1,8 @@
 #!/bin/sh
 
+py -m unittest --verbose
+echo $'\n'
+
 py main.py inspect --pdes 1P
 echo $'\n'
 py main.py inspect --name Halley
@@ -88,8 +91,7 @@ py main.py query --start-date 2020-01-01 --end-date 2020-12-31 --hazardous --min
 echo $'\n'
 
 
-py -m unittest --verbose
-echo $'\n'
+
 
 
 #py main.py interactive

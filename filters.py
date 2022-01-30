@@ -1,5 +1,3 @@
-import math
-
 """
 Provide filters for querying close approaches and limit the generated results.
 
@@ -19,8 +17,9 @@ iterator.
 
 You'll edit this file in Tasks 3a and 3c.
 """
-import operator
 
+import operator
+import math
 
 class UnsupportedCriterionError(NotImplementedError):
     """A filter criterion is unsupported."""
@@ -41,6 +40,7 @@ class AttributeFilter:
     Concrete subclasses can override the `get` classmethod to provide custom
     behavior to fetch a desired attribute from the given `CloseApproach`.
     """
+
     def __init__(self, op, value):
         """Construct a new `AttributeFilter` from an binary predicate and a reference value.
 
@@ -57,7 +57,6 @@ class AttributeFilter:
 
     def __call__(self, approach):
         """Invoke `self(approach)`."""
-
         _value = self.get(approach)
         # if the value is missing, it always fails the filter
         if _value is None:
@@ -66,7 +65,6 @@ class AttributeFilter:
 
     @classmethod
     def get(cls, approach):
-
         """Get an attribute of interest from a close approach.
 
         Concrete subclasses must override this method to get an attribute of
@@ -78,63 +76,72 @@ class AttributeFilter:
         raise UnsupportedCriterionError
 
     def __repr__(self):
+        """Get the string representation."""
         return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})"
 
 
 class DateFilter(AttributeFilter):
-    """filter by date (before or after using le and ge)"""
+    """Filter by date (before or after using le and ge)."""
 
     def __init__(self, op, value):
+        """Construct."""
         super().__init__(op, value)
 
     @classmethod
     def get(cls, approach):
-        # print('date get', str(approach), approach.time)
-        # convert to pure date to match on the day, ignoring the time
+        """Convert to pure date to match on the day, ignoring the time."""
         return approach.time.date()
 
 
 class DistFilter(AttributeFilter):
-    """filter by distance (min or max using le and ge)"""
+    """Filter by distance (min or max using le and ge)."""
+
     def __init__(self, op, value):
+        """Construct."""
         super().__init__(op, value)
 
     @classmethod
     def get(cls, approach):
-        # print('dist get', str(approach), approach.distance)
+        """Return distance."""
         return approach.distance
 
 
 class ApproachVelocityFilter(AttributeFilter):
-    """filter by velocity (min or max using le and ge)"""
+    """Filter by velocity (min or max using le and ge)."""
+
     def __init__(self, op, value):
+        """Construct."""
         super().__init__(op, value)
 
     @classmethod
     def get(cls, approach):
-        # print('vel get', str(approach), approach.velocity)
-        return approach.velocity
+       """Return speed."""
+       return approach.velocity
 
 
 class DiameterFilter(AttributeFilter):
-    """filter by diameter (min or max using le and ge)"""
+    """Filter by diameter (min or max using le and ge)."""
+
     def __init__(self, op, value):
+        """Construct."""
         super().__init__(op, value)
 
     @classmethod
     def get(cls, approach):
-        # print('diam', str(approach), approach.neo.diameter)
+        """Return diameter of neo."""
         return approach.neo.diameter
 
 
 class HazardousFilter(AttributeFilter):
-    """filter by hazardous (Y/N using eq and values True/False)"""
+    """Filter by hazardous (Y/N using eq and values True/False)."""
+
     def __init__(self, value):
+        """Construct."""
         super().__init__(operator.eq, value)
 
     @classmethod
     def get(cls, approach):
-        # print('hazardous get', str(approach), approach.neo.hazardous)
+        """Return hazardous of neo."""
         return approach.neo.hazardous
 
 
@@ -172,7 +179,6 @@ def create_filters(date=None, start_date=None, end_date=None,
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
-
     filters = []
 
     if date:
@@ -207,13 +213,12 @@ def limit(iterator, n=None):
     :param iterator: An iterator of values.
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
+
+    Note: we can use itertools too
     """
-
-    # can use itertools too
-
     iterator = iter(iterator)
 
-    max_count = math.inf if (n is 0 or n is None) else (n - 1)
+    max_count = math.inf if (n == 0 or n is None) else (n - 1)
 
     count = 0
     while count <= max_count:

@@ -1,8 +1,4 @@
-import sys
-import math
-
-"""A database encapsulating collections
-of near-Earth objects and their close approaches.
+"""** A database encapsulating collections of near-Earth objects and their approaches.
 
 A `NEODatabase` holds an interconnected data set of NEOs and close approaches.
 It provides methods to fetch an NEO by primary designation or by name, as well
@@ -16,6 +12,8 @@ data on NEOs and close approaches extracted by `extract.load_neos` and
 You'll edit this file in Tasks 2 and 3.
 """
 
+import sys
+import math
 
 class NEODatabase:
     """A database of near-Earth objects and their close approaches.
@@ -25,6 +23,7 @@ class NEODatabase:
     help fetch NEOs by primary designation or by name and to help speed up
     querying for close approaches that match criteria.
     """
+
     def __init__(self, neos, approaches):
         """Create a new `NEODatabase`.
 
@@ -55,6 +54,7 @@ class NEODatabase:
         self.load()
 
     def load(self):
+        """Go through approaches and map to corresponding neo."""
         for approach in self._approaches:
             corresponding_neo = self.get_neo_by_designation(approach.designation)
             approach.neo = corresponding_neo
@@ -73,7 +73,6 @@ class NEODatabase:
         :param designation: The primary designation of the NEO to search for.
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
-
         return self._lookup.get(designation, None)
 
     def get_neo_by_name(self, name):
@@ -90,7 +89,6 @@ class NEODatabase:
         :param name: The name, as a string, of the NEO to search for.
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
-
         if not name:
             return None
 
@@ -112,7 +110,6 @@ class NEODatabase:
         :param filters: A collection of filters capturing user-specified criteria.
         :return: A stream of matching `CloseApproach` objects.
         """
-
         approaches = self._approaches
 
         for filter_func in filters:
